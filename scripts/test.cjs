@@ -23,6 +23,7 @@ const platforms = [
   },
 ]
 
+let checkedExecutables = 0
 for (const platform of platforms) {
   if (!runtime.includes(platform.hash) || !runtime.includes(platform.launch)) {
     throw new Error(`${platform.store} runtime definition is incomplete`)
@@ -30,6 +31,7 @@ for (const platform of platforms) {
   if (fs.existsSync(platform.executable)) {
     const actual = crypto.createHash('sha256').update(fs.readFileSync(platform.executable)).digest('hex')
     if (actual !== platform.hash) throw new Error(`${platform.store} executable hash changed: ${actual}`)
+    checkedExecutables++
   }
 }
 
@@ -40,4 +42,9 @@ const helperTest = spawnSync(
 )
 if (helperTest.error) throw helperTest.error
 if (helperTest.status !== 0) process.exit(helperTest.status ?? 1)
-console.log('PASS: Epic and Steam definitions match installed executables when present.')
+console.log(
+  checkedExecutables
+    ? `PASS: ${checkedExecutables} installed executable SHA256 value(s) verified.`
+    : 'SKIP: executable SHA256 checks require a local Remnant installation.',
+)
+console.log('PASS: Epic and Steam runtime definitions are complete.')

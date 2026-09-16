@@ -34,6 +34,12 @@ npm run forge -- all
 
 `all` installs dependencies, formats the repository, validates it, runs tests and builds the release files.
 
+## Pull request checks
+
+GitHub Actions runs `npm ci --ignore-scripts` and `npm run check` for every pull request. These checks cover formatting, documentation links, runtime definitions and the isolated Windows memory-helper test.
+
+The hosted runner does not contain Remnant or the third-party Survival PAK, so it deliberately skips installed-executable SHA256 verification and the combined PAK build. `npm run forge` performs those local checks when the required game files are available.
+
 You may also run `node src/build.cjs "C:\path\to\RemnantFromTheAshes"`.
 
 The build reads the original game configuration and the locally installed `zmore_survival_items_P.pak`, produces one combined PAK under `dist/`, substitutes its hash into the runtime helper and writes validation data to `reports/`. It does not install the result or patch a running game.

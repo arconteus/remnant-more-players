@@ -30,6 +30,8 @@ That command runs the complete workflow. Use `npm run forge -- menu` for its int
 
 See [Development](docs/development.md) and [Technical design](docs/technical.md) for details.
 
+Every pull request runs formatting and portable tests on GitHub Actions. Executable SHA256 verification and combined PAK compilation remain local because GitHub's hosted runner does not include Remnant or the required Survival source PAK.
+
 ## Survival vendor credit and reuse
 
 The expanded inventory is derived locally from [Survival vendor tweaks v0.5](https://www.nexusmods.com/remnantfromtheashes/mods/86), created by **ACan** and uploaded to Nexus Mods by **acanthan**. The original page provides no additional permission notes, and no public GitHub repository attributable to that mod was found during the September 2026 search.
