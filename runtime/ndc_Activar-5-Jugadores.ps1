@@ -1,5 +1,13 @@
 param([switch]$Comprobar, [switch]$LaunchGame, [switch]$Silent)
 $ErrorActionPreference = 'Stop'
+function Get-NdcSha256([string]$path) {
+    $stream = [IO.File]::OpenRead($path)
+    try {
+        $sha = [Security.Cryptography.SHA256]::Create()
+        try { return ([BitConverter]::ToString($sha.ComputeHash($stream))).Replace('-', '').ToLowerInvariant() }
+        finally { $sha.Dispose() }
+    } finally { $stream.Dispose() }
+}
 function Report-Ndc([string]$message, [bool]$failed = $false) {
     $message | Set-Content -LiteralPath (Join-Path $PSScriptRoot 'ndc_estado.txt') -Encoding UTF8
     if ($Silent) {
@@ -12,26 +20,40 @@ function Report-Ndc([string]$message, [bool]$failed = $false) {
 }
 try {
     $exe = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../../Binaries/Win64/Remnant-Win64-Shipping.exe'))
-    $expectedHash = '078278b3d52fde90b0d9234c787f27c908db326b8601da9993ea7f1f09da584f'
-    if ((Get-FileHash -LiteralPath $exe -Algorithm SHA256).Hash -ne $expectedHash) { throw 'Version distinta del juego. No se aplicara ningun parche.' }
+    $exeHash = Get-NdcSha256 $exe
+    $platforms = @{
+        '078278b3d52fde90b0d9234c787f27c908db326b8601da9993ea7f1f09da584f' = @{ Store = 'Epic Games'; MemoryPatch = $true }
+        '05c2d85e6c26f7d9aab5d90979f0b487283e180303422f05a7cc3bfa1f13be4c' = @{ Store = 'Steam'; MemoryPatch = $false }
+    }
+    $platform = $platforms[$exeHash]
+    if (-not $platform) { throw "Version del juego no compatible: $exeHash. No se aplicara ningun parche." }
     $pak = Join-Path $PSScriptRoot '../zzzz_FivePlayers_Experimental_P.pak'
-    if ((Get-FileHash -LiteralPath $pak -Algorithm SHA256).Hash -ne '__PAK_SHA256__') { throw 'El paquete PAK falta o ha cambiado.' }
+    if ((Get-NdcSha256 $pak) -ne '__PAK_SHA256__') { throw 'El paquete PAK falta o ha cambiado.' }
     if ($LaunchGame) {
         $installRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../../..')).TrimEnd('\')
-        $manifestFolder = Join-Path $env:ProgramData 'Epic/EpicGamesLauncher/Data/Manifests'
-        $matches = @(Get-ChildItem -LiteralPath $manifestFolder -Filter '*.item' | ForEach-Object {
-            try {
-                $m = Get-Content -LiteralPath $_.FullName -Raw | ConvertFrom-Json
-                if ($m.InstallLocation -and [IO.Path]::GetFullPath($m.InstallLocation).TrimEnd('\') -eq $installRoot) { $m }
-            } catch { }
-        })
-        if ($matches.Count -ne 1 -or -not $matches[0].AppName) { throw 'No se encontro una instalacion unica de Remnant en Epic. Abre Epic y verifica la instalacion.' }
-        $m = $matches[0]
-        $appId = $m.AppName
-        if ($m.CatalogNamespace -and $m.CatalogItemId) { $appId = $m.CatalogNamespace + ':' + $m.CatalogItemId + ':' + $m.AppName }
-        $launchUri = 'com.epicgames.launcher://apps/' + [Uri]::EscapeDataString($appId) + '?action=launch&silent=true'
+        if ($platform.Store -eq 'Epic Games') {
+            $manifestFolder = Join-Path $env:ProgramData 'Epic/EpicGamesLauncher/Data/Manifests'
+            $matches = @(Get-ChildItem -LiteralPath $manifestFolder -Filter '*.item' | ForEach-Object {
+                try {
+                    $m = Get-Content -LiteralPath $_.FullName -Raw | ConvertFrom-Json
+                    if ($m.InstallLocation -and [IO.Path]::GetFullPath($m.InstallLocation).TrimEnd('\') -eq $installRoot) { $m }
+                } catch { }
+            })
+            if ($matches.Count -ne 1 -or -not $matches[0].AppName) { throw 'No se encontro una instalacion unica de Remnant en Epic. Verifica la instalacion.' }
+            $m = $matches[0]
+            $appId = $m.AppName
+            if ($m.CatalogNamespace -and $m.CatalogItemId) { $appId = $m.CatalogNamespace + ':' + $m.CatalogItemId + ':' + $m.AppName }
+            $launchUri = 'com.epicgames.launcher://apps/' + [Uri]::EscapeDataString($appId) + '?action=launch&silent=true'
+        } else {
+            $launchUri = 'steam://run/617290'
+        }
     }
-    if ($Comprobar) { Write-Host 'OK: ejecutable, PAK y configuracion de lanzamiento verificados.'; exit 0 }
+    if ($Comprobar) {
+        $checkMessage = "OK: $($platform.Store), ejecutable, PAK y lanzamiento verificados."
+        $checkMessage | Set-Content -LiteralPath (Join-Path $PSScriptRoot 'ndc_estado.txt') -Encoding UTF8
+        Write-Host $checkMessage
+        exit 0
+    }
     Add-Type -TypeDefinition @'
 using System;
 using System.Runtime.InteropServices;
@@ -48,7 +70,7 @@ public static class FivePlayersMemory {
         $existing = Get-Process -Name 'Remnant-Win64-Shipping' -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $exe }
         if (-not $existing) { Start-Process -FilePath $launchUri -WindowStyle Hidden | Out-Null }
     }
-    Write-Host 'Abre Remnant desde Epic y espera en el menu principal. No crees la partida todavia.'
+    Write-Host "Abre Remnant desde $($platform.Store) y espera en el menu principal. No crees la partida todavia."
     $deadline = (Get-Date).AddMinutes(3)
     $game = $null
     while ((Get-Date) -lt $deadline) {
@@ -57,6 +79,10 @@ public static class FivePlayersMemory {
         Start-Sleep -Milliseconds 500
     }
     if (-not $game) { throw 'No se encontro el juego en tres minutos. Vuelve a ejecutar este ayudante.' }
+    if (-not $platform.MemoryPatch) {
+        Report-Ndc "Mod de 5 jugadores activo para $($platform.Store). Puedes crear una partida nueva."
+        exit 0
+    }
     $address = [IntPtr]($game.MainModule.BaseAddress.ToInt64() + 0x59A639)
     $handle = [FivePlayersMemory]::OpenProcess(0x438, $false, $game.Id)
     if ($handle -eq [IntPtr]::Zero) { throw 'No se pudo abrir el proceso. Ejecuta juego y ayudante con el mismo nivel de permisos.' }
@@ -88,4 +114,3 @@ public static class FivePlayersMemory {
     Report-Ndc ('ERROR: ' + $_.Exception.Message) $true
     exit 1
 }
-

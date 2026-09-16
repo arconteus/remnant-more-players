@@ -31,5 +31,3 @@ try {
     if ($handle -ne [IntPtr]::Zero) { [void][FivePlayersMemory]::CloseHandle($handle) }
     [Runtime.InteropServices.Marshal]::FreeHGlobal($memory)
 }
-
-

@@ -1,6 +1,6 @@
 {
   "name": "remnant-more-players",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "license": "MIT",
   "description": "Local build tools for Remnant: From the Ashes",
@@ -8,7 +8,11 @@
     "node": ">=18"
   },
   "scripts": {
+    "forge": "node scripts/forge.mjs",
     "build": "node src/build.cjs",
-    "test": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File src/test-helper.ps1"
+    "test": "node scripts/test.cjs",
+    "format": "node scripts/format.cjs",
+    "format:check": "node scripts/format.cjs --check",
+    "check": "node scripts/check.cjs"
   }
 }
