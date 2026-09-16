@@ -11,29 +11,20 @@
 - A supported local Remnant installation
 - PowerShell 5.1 or newer
 
-No npm packages are required.
-
-## Build and test
-
-From the repository root:
-
-```powershell
-$env:REMNANT_GAME_DIR = 'C:\Program Files\Epic Games\RemnantFromTheAshes'
-npm run build
-npm test
-```
+Forge installs and verifies npm dependencies. The current project has no third-party npm runtime packages, but the setup step still creates a reproducible lockfile and checks the local toolchain.
 
 ## Forge
 
-Forge follows the Codekeeper-style workflow used by Shard Archive:
+Forge is the developer entry point. From the repository root:
 
 ```powershell
 npm run forge
 ```
 
-The interactive menu can format, test, check or build the project. Direct commands are available for automation:
+The default command runs the complete workflow. Use `npm run forge -- menu` for the interactive menu. Direct commands are available for automation:
 
 ```powershell
+npm run forge -- setup
 npm run forge -- format
 npm run forge -- test
 npm run forge -- check
@@ -41,11 +32,11 @@ npm run forge -- build
 npm run forge -- all
 ```
 
-`all` formats the repository, validates formatting, runs the helper tests and builds the release files.
+`all` installs dependencies, formats the repository, validates it, runs tests and builds the release files.
 
 You may also run `node src/build.cjs "C:\path\to\RemnantFromTheAshes"`.
 
-The build reads the original configuration from the installed game, produces the PAK under `dist/`, substitutes the generated PAK hash into the runtime helper and writes validation data to `reports/`. It does not install the result or patch a running game.
+The build reads the original game configuration and the locally installed `zmore_survival_items_P.pak`, produces one combined PAK under `dist/`, substitutes its hash into the runtime helper and writes validation data to `reports/`. It does not install the result or patch a running game.
 
 ## Structure
 

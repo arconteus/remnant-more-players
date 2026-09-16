@@ -26,7 +26,7 @@ C7 40 08 03 00 00 00  ->  C7 40 08 05 00 00 00
 - Five-player gameplay has not yet been confirmed by a complete group.
 - Steam uses the PAK-configured session limit; its supported executable hash is checked before launch.
 - Doors and zone travel are not explicitly patched.
-- Survival shops require the separate compatibility patch.
+- The combined PAK includes the five-player limit and Survival vendor tables. The enlarged three-player inventory group is made eligible for four- and five-player groups while the one-, two- and three-player behavior remains unchanged.
 - Game updates change the executable hash and are rejected until verified.
 
 ---

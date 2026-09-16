@@ -15,10 +15,12 @@ Before publishing a release:
 4. State both supported executable hashes and the store-specific behavior.
 5. Describe five-player support and travel behavior as experimental until tested.
 6. Explain that the helper changes one verified byte in the running process and does not alter the executable on disk.
+7. Credit **ACan** (Nexus uploader **acanthan**) and link the original [Survival vendor tweaks](https://www.nexusmods.com/remnantfromtheashes/mods/86).
+8. Obtain the author's written redistribution permission before uploading a release containing the derived Survival vendor assets.
 
 Suggested title: **Remnant: From the Ashes — More Players (5 players, Epic + Steam, experimental)**.
 
-The MIT license applies to original source and documentation only. It does not grant rights to game assets or third-party content embedded in generated files.
+The MIT license applies to original source and documentation only. The Nexus page supplies no redistribution permission and no public source repository was found, so the generated combined PAK must not be published until ACan grants permission. Users may build it locally from their own downloaded copy.
 
 ---
 

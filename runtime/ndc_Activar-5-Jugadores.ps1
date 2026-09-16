@@ -27,7 +27,7 @@ try {
     }
     $platform = $platforms[$exeHash]
     if (-not $platform) { throw "Version del juego no compatible: $exeHash. No se aplicara ningun parche." }
-    $pak = Join-Path $PSScriptRoot '../zzzz_FivePlayers_Experimental_P.pak'
+    $pak = Join-Path $PSScriptRoot '../zzzz_NDC_MorePlayers_P.pak'
     if ((Get-NdcSha256 $pak) -ne '__PAK_SHA256__') { throw 'El paquete PAK falta o ha cambiado.' }
     if ($LaunchGame) {
         $installRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../../..')).TrimEnd('\')

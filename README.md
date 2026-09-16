@@ -5,44 +5,37 @@
 [![Technical](https://img.shields.io/badge/docs-technical-555555)](docs/technical.md)
 [![Publishing](https://img.shields.io/badge/docs-publishing-2da44e)](docs/publishing.md)
 
-Experimental five-player mod for **Remnant: From the Ashes**.
+Experimental five-player mod for **Remnant: From the Ashes**, compatible with the verified Epic Games and Steam executables. Its single PAK also includes expanded Survival vendor inventory for groups of four or five players.
 
-It combines a PAK that sets the player limit to five with a small Windows helper that updates the session capacity while the game is running. The game executable is never modified on disk.
+## Install and play
 
-## Install
+1. Copy the contents of `dist/Remnant` into the game's `Remnant` directory.
+2. Remove older four-player, five-player and separate Survival shop compatibility PAKs.
+3. Every player installs `zzzz_NDC_MorePlayers_P.pak`.
+4. The host opens `Remnant/Content/Paks/FivePlayers/ndc_Jugar-Remnant.vbs` and waits for the success message before creating the session.
 
-1. Download or build the release files.
-2. Copy the contents of `dist/Remnant` into the game's `Remnant` directory.
-3. Remove or disable older `4player.pak` and four-player variants.
-4. The host launches the game with `Remnant/Content/Paks/FivePlayers/ndc_Jugar-Remnant.vbs`.
-5. Wait for **“Mod de 5 jugadores activo”**, then create a new session.
+Epic hosting uses a verified in-memory EOS session patch. Steam uses the session limit in the PAK. The executable is never modified on disk. Five-player gameplay, mixed-store travel and the expanded shop still require a complete in-game group test.
 
-Guests need `zzzz_FivePlayers_Experimental_P.pak` in their `Remnant/Content/Paks` folder. The launcher recognizes verified Epic Games and Steam builds. Epic requires an additional in-memory EOS session patch; Steam uses the PAK session limit. Five-player gameplay and travel transitions still require testing.
+See [Installation and usage](docs/installation.md) for full instructions.
 
-## Development
+## Development with Forge
 
-Requires Windows, Node.js 18 or newer, and a local game installation:
-
-```powershell
-$env:REMNANT_GAME_DIR = 'C:\Program Files\Epic Games\RemnantFromTheAshes'
-npm run build
-npm test
-```
-
-Or run the complete development workflow:
+Forge is the single developer entry point. It prepares dependencies, formats the repository, runs checks and builds the release:
 
 ```powershell
 npm run forge
-npm run forge -- all
 ```
 
-More information:
+That command runs the complete workflow. Use `npm run forge -- menu` for its interactive menu, or use `setup`, `format`, `test`, `check`, `build` and `all` as direct commands. The build requires Node.js 18+, a supported local game installation and a legitimately downloaded `zmore_survival_items_P.pak` in the game's `Remnant/Content/Paks` directory.
 
-- [Installation and usage](docs/installation.md)
-- [Building and project structure](docs/development.md)
-- [Technical design and limitations](docs/technical.md)
-- [Publishing checklist](docs/publishing.md)
+See [Development](docs/development.md) and [Technical design](docs/technical.md) for details.
+
+## Survival vendor credit and reuse
+
+The expanded inventory is derived locally from [Survival vendor tweaks v0.5](https://www.nexusmods.com/remnantfromtheashes/mods/86), created by **ACan** and uploaded to Nexus Mods by **acanthan**. The original page provides no additional permission notes, and no public GitHub repository attributable to that mod was found during the September 2026 search.
+
+The repository therefore contains the integration code, attribution and tests, but not the author's original PAK or extracted assets. A local build reads the user's own copy and produces the combined PAK. Do not publish that generated PAK on GitHub Releases, Nexus Mods or elsewhere without written permission from ACan. See the [publishing checklist](docs/publishing.md).
 
 ## License
 
-Original code and documentation are available under the [MIT License](LICENSE). Game files and other third-party content are excluded.
+Original source code and documentation in this repository are available under the [MIT License](LICENSE). That license does not cover Remnant game files, ACan's Survival vendor assets or any other third-party content.

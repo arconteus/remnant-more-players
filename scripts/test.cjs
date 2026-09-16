@@ -5,6 +5,9 @@ const { spawnSync } = require('node:child_process')
 
 const root = path.resolve(__dirname, '..')
 const runtime = fs.readFileSync(path.join(root, 'runtime', 'ndc_Activar-5-Jugadores.ps1'), 'utf8')
+const builder = fs.readFileSync(path.join(root, 'src', 'build.cjs'), 'utf8')
+if (!runtime.includes('zzzz_NDC_MorePlayers_P.pak')) throw new Error('Runtime does not target the combined PAK')
+if (!builder.includes('Survival vendor tweaks v0.5 by ACan')) throw new Error('Survival shop attribution is missing')
 const platforms = [
   {
     store: 'Epic Games',

@@ -8,7 +8,7 @@
 Copy the generated `dist/Remnant` directory over the game's `Remnant` directory. Typical roots are the Epic installation directory or `<Steam library>/steamapps/common/Remnant`. The expected result is:
 
 ```text
-Remnant/Content/Paks/zzzz_FivePlayers_Experimental_P.pak
+Remnant/Content/Paks/zzzz_NDC_MorePlayers_P.pak
 Remnant/Content/Paks/FivePlayers/ndc_Jugar-Remnant.vbs
 Remnant/Content/Paks/FivePlayers/ndc_Activar-5-Jugadores.ps1
 Remnant/Content/Paks/FivePlayers/ndc_Activar-5-Jugadores.cmd
@@ -22,7 +22,7 @@ For every play session, double-click `ndc_Jugar-Remnant.vbs`. It identifies the 
 
 ## Guests
 
-Guests install `zzzz_FivePlayers_Experimental_P.pak` in `Remnant/Content/Paks`. Epic hosting uses the PAK plus an EOS memory patch. Steam hosting uses the PAK-configured session limit. Five-player mixed-store play has not yet been confirmed.
+Every player installs `zzzz_NDC_MorePlayers_P.pak` in `Remnant/Content/Paks`. It contains both the five-player configuration and the Survival shop compatibility tables. Epic hosting uses the PAK plus an EOS memory patch. Steam hosting uses the PAK-configured session limit. Five-player mixed-store play has not yet been confirmed.
 
 ## Uninstall
 
