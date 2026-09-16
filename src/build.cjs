@@ -126,7 +126,7 @@ const report = {
   limitations: [
     'Five-player gameplay still requires a complete group test',
     'Survival inventory changes require in-game verification',
-    'Redistribution of the third-party Survival assets requires permission from ACan',
+    'Releases containing the Survival assets must credit ACan and disable Nexus Mods Donation Points',
   ],
 }
 fs.writeFileSync(path.join(paths.reports, 'build-report.json'), JSON.stringify(report, null, 2))
@@ -143,3 +143,7 @@ for (const name of [
   fs.writeFileSync(path.join(helperOutput, name), source.replaceAll('__PAK_SHA256__', pakHash))
 }
 fs.copyFileSync(path.join(paths.project, 'README.md'), path.join(paths.project, 'dist/README.md'))
+fs.copyFileSync(
+  path.join(paths.project, 'THIRD_PARTY_NOTICES.md'),
+  path.join(paths.project, 'dist/THIRD_PARTY_NOTICES.md'),
+)

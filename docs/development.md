@@ -55,6 +55,8 @@ reports/   Generated validation reports; ignored by Git
 private/   Local research and extracted files; ignored by Git
 ```
 
+`THIRD_PARTY_NOTICES.md` records the separate permissions and attribution for assets that are not covered by the repository's MIT License. The build copies that notice into `dist/` automatically.
+
 Install helpers from `dist`, because the source PowerShell template contains a PAK hash placeholder that the build replaces.
 
 ---

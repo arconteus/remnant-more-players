@@ -34,10 +34,10 @@ Every pull request runs formatting and portable tests on GitHub Actions. Executa
 
 ## Survival vendor credit and reuse
 
-The expanded inventory is derived locally from [Survival vendor tweaks v0.5](https://www.nexusmods.com/remnantfromtheashes/mods/86), created by **ACan** and uploaded to Nexus Mods by **acanthan**. The original page provides no additional permission notes, and no public GitHub repository attributable to that mod was found during the September 2026 search.
+The expanded inventory uses assets from [Survival vendor tweaks v0.5](https://www.nexusmods.com/remnantfromtheashes/mods/86), created by **ACan** and uploaded to Nexus Mods by **acanthan**. No public GitHub repository attributable to that mod was found during the September 2026 search.
 
-The repository therefore contains the integration code, attribution and tests, but not the author's original PAK or extracted assets. A local build reads the user's own copy and produces the combined PAK. Do not publish that generated PAK on GitHub Releases, Nexus Mods or elsewhere without written permission from ACan. See the [publishing checklist](docs/publishing.md).
+The permissions shown on its Nexus page allow redistribution to other sites with creator credit, modification and asset reuse. They do not allow mods using those assets to earn Nexus Mods Donation Points. Releases must credit ACan and have Donation Points disabled. See [third-party notices](THIRD_PARTY_NOTICES.md) and the [publishing checklist](docs/publishing.md).
 
 ## License
 
-Original source code and documentation in this repository are available under the [MIT License](LICENSE). That license does not cover Remnant game files, ACan's Survival vendor assets or any other third-party content.
+Original source code and documentation in this repository are available under the [MIT License](LICENSE). This is the correct license for the original development tools, launcher and documentation. It does not cover Remnant game files, ACan's Survival vendor assets or any other third-party content; those are described in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

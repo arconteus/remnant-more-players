@@ -14,6 +14,10 @@ function run(command, args) {
 }
 
 JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'))
+const notices = fs.readFileSync(path.join(root, 'THIRD_PARTY_NOTICES.md'), 'utf8')
+if (!notices.includes('ACan') || !notices.includes('Donation Points')) {
+  throw new Error('Third-party attribution or Donation Points restriction is missing')
+}
 for (const name of ['installation.md', 'development.md', 'technical.md', 'publishing.md']) {
   const contents = fs.readFileSync(path.join(root, 'docs', name), 'utf8')
   if (!contents.includes('../README.md')) throw new Error(`${name} has no link back to README.md`)
