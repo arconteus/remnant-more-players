@@ -6,7 +6,7 @@ Experimental five-player session mod for one verified Epic Games executable. The
 
 Copy the contents of the generated `dist/Remnant` folder into the game's `Remnant` folder. Disable earlier four-player PAKs before installing this version; restart the game before using the new helper.
 
-The Epic host runs `Remnant/Content/Paks/FivePlayers/ndc_Activar-5-Jugadores.cmd`, starts the game normally from Epic, waits for OK, and then creates a new session. Repeat after each game restart. The helper can exit once the patch succeeds. Guests use the same `zzzz_FivePlayers_Experimental_P.pak`; the helper does not support a different Steam executable. Use the verified Epic installation as host for mixed groups.
+The Epic host double-clicks `Remnant/Content/Paks/FivePlayers/ndc_Jugar-Remnant.vbs`. It opens the installed game through Epic and applies the patch in a hidden helper process. A brief confirmation appears when ready; create a new session after that. Errors appear in a dialog, and the latest result is saved in `ndc_estado.txt`. Use this launcher each time; launching directly from Epic does not automatically run the helper. Windows Script Host / VBScript is required for this launcher. The CMD remains available as a manual fallback. Guests use the same `zzzz_FivePlayers_Experimental_P.pak`; the helper does not support a different Steam executable. Use the verified Epic installation as host for mixed groups.
 
 The PAK sets `Engine.GameSession.MaxPlayers=5`. The helper changes one immediate byte in `UMatchmaker::CreateSession` in memory, from 3 to 5. It does not modify the executable on disk. It checks the executable and PAK SHA256, the process path and original instruction, and verifies the resulting bytes. Closing the game removes the memory change.
 
@@ -28,7 +28,7 @@ Alternatively: `node src/build.cjs "C:\path\to\RemnantFromTheAshes"`. When this 
 
 `runtime/` contains the maintained helper template. The builder substitutes __PAK_SHA256__ with the generated PAK hash; install the helper from dist, not the template. `src/` contains the builder, PAK reader and a test of the helper on private test memory. `reports/` contains generated verification output. `private/research/` preserves the earlier investigation, including historical scripts with old paths; it is not part of the supported build workflow.
 
-For local uninstall, close the game, remove the mod PAK and the two helper files. Other mods need not be removed.
+For local uninstall, close the game, remove the mod PAK and the launcher and helper files. Other mods need not be removed.
 
 ## Publishing
 
@@ -37,5 +37,6 @@ See [PUBLISHING.md](PUBLISHING.md). No files have been uploaded.
 ## License
 
 The original code and documentation in this project are licensed under the [MIT License](LICENSE). Third-party game content is excluded and remains subject to its respective owners' rights.
+
 
 
