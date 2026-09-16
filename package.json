@@ -1,0 +1,14 @@
+{
+  "name": "remnant-five-players",
+  "version": "0.2.0",
+  "private": true,
+  "license": "MIT",
+  "description": "Local build tools for Remnant: From the Ashes",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node src/build.cjs",
+    "test": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File src/test-helper.ps1"
+  }
+}

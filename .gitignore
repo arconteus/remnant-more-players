@@ -1,0 +1,12 @@
+private/
+reports/
+dist/
+node_modules/
+*.zip
+*.pak
+*.uasset
+*.uexp
+*.pdb
+*.exe
+*.dll
+*.bin
